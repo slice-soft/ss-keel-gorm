@@ -1,5 +1,5 @@
 
-# Contributing to ss-keel-cli
+# Contributing to ss-keel-gorm
 
 The base contributing guide — workflow, commit conventions, PR guidelines, and community standards — lives in the [ss-community](https://github.com/slice-soft/ss-community/blob/main/CONTRIBUTING.md) repository. Read it first.
 
@@ -17,8 +17,8 @@ This document covers only what is specific to this repository.
 1. **Fork the repository**
 2. **Clone your fork**
    ```bash
-   git clone https://github.com/YOUR_USERNAME/REPO_NAME.git
-   cd keel
+   git clone https://github.com/YOUR_USERNAME/ss-keel-gorm.git
+   cd ss-keel-gorm
    ```
 
 3. **Install dependencies**
