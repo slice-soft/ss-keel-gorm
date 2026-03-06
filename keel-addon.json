@@ -1,21 +1,28 @@
 {
-  "name": "my-addon",
+  "name": "ss-keel-gorm",
   "version": "0.1.0",
-  "description": "Description of my addon",
-  "register": true,
-  "repo": "github.com/your-user/your-repo",
+  "description": "SQL via GORM — Postgres, MySQL, SQLite, SQL Server",
+  "repo": "github.com/slice-soft/ss-keel-gorm",
   "steps": [
     {
-      "file": "cmd/main.go",
-      "action": "append",
-      "snippet": "// TODO: add addon initialization here",
-      "flags": []
+      "type": "go_get",
+      "package": "github.com/slice-soft/ss-keel-gorm"
     },
     {
-      "file": "config/config.go",
-      "action": "append",
-      "snippet": "// TODO: add addon configuration here",
-      "flags": []
+      "type": "env",
+      "key": "DATABASE_URL",
+      "example": "postgres://user:pass@localhost:5432/db?sslmode=disable",
+      "description": "Database connection string"
+    },
+    {
+      "type": "main_import",
+      "path": "github.com/slice-soft/ss-keel-gorm/database"
+    },
+    {
+      "type": "main_code",
+      "anchor": "before_listen",
+      "guard": "database.New(",
+      "code": "db, err := database.New(database.Config{\n\tEngine: database.EnginePostgres,\n\tDSN:    os.Getenv(\"DATABASE_URL\"),\n})\nif err != nil {\n\tlog.Fatal(err)\n}\ndefer db.Close()\napp.RegisterHealthChecker(database.NewHealthChecker(db))"
     }
   ]
 }
