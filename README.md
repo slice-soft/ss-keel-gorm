@@ -12,145 +12,154 @@ architecture, automatic OpenAPI, and built-in validation.
 ![Made in Colombia](https://img.shields.io/badge/Made%20in-Colombia-FCD116?labelColor=003893)
 
 
-This repository is a **base template** for building **Keel Framework** addons.
-It helps developers and companies quickly create functional addons with CI/CD, testing, and automated releases.
-It also serves as a reference for the `keel-addon.json` contract used by the CLI to download and integrate addons into Keel projects.
+## Database addon for Keel
+
+`ss-keel-gorm` adds SQL database support to a [Keel](https://keel-go.dev) project via [GORM](https://gorm.io).
+It is the official addon for relational databases in the Keel ecosystem.
 
 ---
 
-## 🚀 Template structure
-
-```
-ss-keel-addon-template/
-├── .github/workflows/    # CI and release workflows (commented by default)
-│   ├── ci.yml
-│   └── release.yml
-├── .gitignore
-├── .release-please-manifest.json
-├── .release-please-config.json
-├── CONTRIBUTING.md       # Contribution guide
-├── keel-addon.json       # Addon contract for the CLI
-├── LICENSE
-├── README.md
-└── go.mod
-```
-
----
-
-## 🛠️ Create a new addon
-
-To create an addon from this template:
-
-```bash
-# Clone the template into a new project
-git clone https://github.com/slice-soft/ss-keel-addon-template.git my-addon
-cd my-addon
-
-#delete the existing git history
-rm -rf .git
-
-# Initialize a new git repository
-git init
-
-# Update the Go module path
-go mod edit -module github.com/my-company/my-addon
-go mod tidy
-```
-
-> `my-addon` is now ready to be developed and registered in Keel.
-
-Edit `keel-addon.json` with your addon's real values (`name`, `repo`, `version`, `steps`, etc.).
-
----
-
-## ⚡️ Keel integration
-
-* Place your addon logic in `internal/addon`.
-* Define metadata in `keel-addon.json`. This file is the contract the Keel CLI validates to install and integrate the addon.
-
-```json
-{
-  "name": "my-addon",
-  "version": "0.1.0",
-  "description": "Short addon description",
-  "register": true,
-  "repo": "github.com/your-user/your-repo",
-  "steps": [
-    {
-      "file": "cmd/main.go",
-      "action": "append",
-      "snippet": "// TODO: add addon initialization here",
-      "flags": []
-    }
-  ]
-}
-```
-
-* The Keel CLI uses this file to:
-  * Resolve the module to download (`repo`).
-  * Validate that the addon matches the expected format.
-  * Execute `steps` to integrate changes automatically.
-  * Register the addon when applicable (`register`).
-
----
-
-## 🧭 `keel add` flow in the ecosystem
-
-The CLI supports two installation paths:
-
-1. **Official or verified addons**
+## 🚀 Installation
 
 ```bash
 keel add gorm
 ```
 
-* `gorm` is interpreted as an alias.
-* The CLI checks the `ss-keel-addons` alias repository.
-* If the alias exists, it gets the addon URL, downloads it, and validates its `keel-addon.json`.
-* Then it executes the defined `steps` to integrate it automatically into the project.
-
-2. **Unofficial addons or addons not verified by SliceSoft/community**
-
-```bash
-keel add github.com/user/repo
-```
-
-* The CLI uses the provided repository directly.
-* It downloads the module and validates its `keel-addon.json`.
-* If validation passes, it applies the automatic integration steps the same way as official addons.
+The Keel CLI will:
+1. Add `github.com/slice-soft/ss-keel-gorm` as a dependency.
+2. Import the `database` package in `cmd/main.go` and inject initialization code.
+3. Add a `DATABASE_URL` environment variable example to your `.env`.
 
 ---
 
-## 📚 Alias library: `ss-keel-addons`
+## ⚙️ Configuration
 
-`ss-keel-addons` works as an alias catalog/library for addons.
+### Via DSN (recommended)
 
-* Stores the relationship `alias -> repository URL`.
-* Lets the CLI verify whether an alias exists before installing.
-* Centralizes official or community-verified addons.
-* Acts as the entry point for pre-validation before the automatic download and integration process.
+```go
+db, err := database.New(database.Config{
+  Engine: database.EnginePostgres,
+  DSN:    os.Getenv("DATABASE_URL"),
+})
+if err != nil {
+  log.Fatal(err)
+}
+defer db.Close()
+```
+
+### Via individual fields
+
+```go
+db, err := database.New(database.Config{
+  Engine:   database.EnginePostgres,
+  Host:     "localhost",
+  Port:     5432,
+  User:     "postgres",
+  Password: "postgres",
+  Database: "app",
+})
+```
+
+---
+
+## 🗄️ Supported engines
+
+| Engine | Constant |
+|---|---|
+| PostgreSQL | `database.EnginePostgres` |
+| MySQL | `database.EngineMySQL` |
+| MariaDB | `database.EngineMariaDB` |
+| SQLite | `database.EngineSQLite` |
+| SQL Server | `database.EngineSQLServer` |
+
+---
+
+## 🔗 Connection pool
+
+Pool defaults applied when not overridden:
+
+| Parameter | Default |
+|---|---|
+| `MaxOpenConns` | 25 |
+| `MaxIdleConns` | 5 |
+| `ConnMaxLifetime` | 30 min |
+| `ConnMaxIdleTime` | 15 min |
+
+Override via `Config.Pool`:
+
+```go
+db, err := database.New(database.Config{
+  Engine: database.EnginePostgres,
+  DSN:    os.Getenv("DATABASE_URL"),
+  Pool: database.PoolConfig{
+    MaxOpenConns:    50,
+    MaxIdleConns:    10,
+    ConnMaxLifetime: time.Hour,
+    ConnMaxIdleTime: 20 * time.Minute,
+  },
+})
+```
+
+---
+
+## 📦 Generic repository
+
+`GormRepository[T, ID]` implements `core.Repository[T, ID]` and provides standard CRUD out of the box.
+
+```go
+type UserRepository = database.GormRepository[User, string]
+
+func NewUserRepository(db *database.DBinstance) *UserRepository {
+    return database.NewGormRepository[User, string](db)
+}
+```
+
+Available methods: `FindByID`, `FindAll` (paginated), `Create`, `Update`, `Delete`.
+Use `DB()` to access the underlying `*gorm.DB` for custom queries.
+
+---
+
+## ❤️ Health checker
+
+Register the database in the Keel health endpoint:
+
+```go
+app.RegisterHealthChecker(database.NewHealthChecker(db))
+```
+
+This exposes the database status under `GET /health`:
+
+```json
+{ "database": "UP" }
+```
+
+---
+
+## 🔌 Custom engines (Oracle and others)
+
+Use `RegisterDialector` to plug any third-party dialector:
+
+```go
+_ = database.RegisterDialector(database.EngineOracle, func(cfg database.Config) (gorm.Dialector, error) {
+  // return oracleDriver.Open(cfg.DSN), nil
+  return nil, errors.New("wire your Oracle dialector here")
+})
+```
 
 ---
 
 ## 🤚 CI/CD and releases
 
-This repository is a template, so workflows are intentionally shipped **commented out** to avoid accidental executions after cloning:
-
-* `.github/workflows/ci.yml`
-* `.github/workflows/release.yml`
-
-To enable CI/CD in your new addon repository:
-
-1. Uncomment both workflow files.
-2. Push to GitHub to validate that Actions run correctly.
+- **CI** runs on every pull request targeting `main` via `.github/workflows/ci.yml`.
+- **Releases** are created automatically on merge to `main` via `.github/workflows/release.yml` using Release Please.
 
 ---
 
 ## 💡 Recommendations
 
-* Keep your addons independent and modular.
-* Use Keel events and guards to extend functionality without touching the core.
-* Document each addon in its own project README.
+* Use `DSN` for production deployments; it keeps the config flexible and avoids exposing individual credentials in code.
+* Embed `GormRepository` or alias it in your domain layer to keep infrastructure details out of your business logic.
+* Register `NewHealthChecker` so Keel's `/health` endpoint always reflects real database connectivity.
 
 ---
 
