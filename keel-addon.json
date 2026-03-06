@@ -19,10 +19,18 @@
       "path": "github.com/slice-soft/ss-keel-gorm/database"
     },
     {
+      "type": "main_import",
+      "path": "github.com/slice-soft/ss-keel-core/config"
+    },
+    {
+      "type": "main_import",
+      "path": "github.com/slice-soft/ss-keel-core/logger"
+    },
+    {
       "type": "main_code",
       "anchor": "before_listen",
       "guard": "database.New(",
-      "code": "db, err := database.New(database.Config{\n\tEngine: database.EnginePostgres,\n\tDSN:    os.Getenv(\"DATABASE_URL\"),\n})\nif err != nil {\n\tlog.Fatal(err)\n}\ndefer db.Close()\napp.RegisterHealthChecker(database.NewHealthChecker(db))"
+      "code": "databaseURL := config.GetEnvOrDefault(\"DATABASE_URL\", \"postgres://user:pass@localhost:5432/db?sslmode=disable\")\n\ndb, err := database.New(database.Config{\n\tEngine: database.EnginePostgres,\n\tDSN:    databaseURL,\n\tLogger: appLogger,\n})\nif err != nil {\n\tappLogger.Error(\"failed to start app: %v\", err)\n}\ndefer db.Close()\napp.RegisterHealthChecker(database.NewHealthChecker(db))"
     }
   ]
 }
