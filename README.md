@@ -39,10 +39,11 @@ The Keel CLI will:
 ```go
 db, err := database.New(database.Config{
   Engine: database.EnginePostgres,
-  DSN:    os.Getenv("DATABASE_URL"),
+  DSN:    config.GetEnvOrDefault("DATABASE_URL", "postgres://user:pass@localhost:5432/db?sslmode=disable"),
+  Logger: app.Logger(),
 })
 if err != nil {
-  log.Fatal(err)
+  app.Logger().Error("failed to start app: %v", err)
 }
 defer db.Close()
 ```
@@ -90,7 +91,8 @@ Override via `Config.Pool`:
 ```go
 db, err := database.New(database.Config{
   Engine: database.EnginePostgres,
-  DSN:    os.Getenv("DATABASE_URL"),
+  DSN:    config.GetEnvOrDefault("DATABASE_URL", "postgres://user:pass@localhost:5432/db?sslmode=disable"),
+  Logger: app.Logger(),
   Pool: database.PoolConfig{
     MaxOpenConns:    50,
     MaxIdleConns:    10,
