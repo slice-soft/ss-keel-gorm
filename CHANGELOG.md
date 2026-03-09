@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/slice-soft/ss-keel-gorm/compare/v1.0.1...v1.1.0) (2026-03-09)
+
+
+### Features
+
+* fix contracts ([#5](https://github.com/slice-soft/ss-keel-gorm/issues/5)) ([921937a](https://github.com/slice-soft/ss-keel-gorm/commit/921937a53f69bf23cb19e52c69d096de0cd1497f))
+
 ## [1.0.1](https://github.com/slice-soft/ss-keel-gorm/compare/v1.0.0...v1.0.1) (2026-03-06)
 
 
