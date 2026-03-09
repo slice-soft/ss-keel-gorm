@@ -16,8 +16,8 @@ func TestConfigWithDefaults_AppliesExpectedDefaults(t *testing.T) {
 	if cfg.SSLMode != "disable" {
 		t.Fatalf("expected default ssl mode disable, got %q", cfg.SSLMode)
 	}
-	if cfg.TimeZone != "America/Bogota" {
-		t.Fatalf("expected default timezone America/Bogota, got %q", cfg.TimeZone)
+	if cfg.TimeZone != "UTC" {
+		t.Fatalf("expected default timezone UTC, got %q", cfg.TimeZone)
 	}
 	if cfg.Pool.MaxOpenConns != 25 {
 		t.Fatalf("expected default max open conns 25, got %d", cfg.Pool.MaxOpenConns)
@@ -94,4 +94,3 @@ func TestPoolConfigWithDefaults_NormalizesValues(t *testing.T) {
 		t.Fatalf("expected default conn max idle time 15m, got %s", pool.ConnMaxIdleTime)
 	}
 }
-

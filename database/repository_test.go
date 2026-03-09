@@ -7,6 +7,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/slice-soft/ss-keel-core/core/httpx"
 	"gorm.io/gorm"
 )
 
@@ -84,7 +85,7 @@ func TestGormRepository_CRUD(t *testing.T) {
 		t.Fatalf("expected updated name, got %+v", updated)
 	}
 
-	page, err := repo.FindAll(ctx, PageQuery{Page: 1, Limit: 1})
+	page, err := repo.FindAll(ctx, httpx.PageQuery{Page: 1, Limit: 1})
 	if err != nil {
 		t.Fatalf("FindAll returned error: %v", err)
 	}
@@ -131,7 +132,7 @@ func TestGormRepository_FindAllCountError(t *testing.T) {
 	})
 
 	repo := NewGormRepositoryFromDB[repoUser, int](db)
-	_, err := repo.FindAll(ctx, PageQuery{Page: 1, Limit: 10})
+	_, err := repo.FindAll(ctx, httpx.PageQuery{Page: 1, Limit: 10})
 	if err == nil {
 		t.Fatal("expected count error")
 	}
@@ -163,7 +164,7 @@ func TestGormRepository_FindAllQueryError(t *testing.T) {
 	})
 
 	repo := NewGormRepositoryFromDB[repoUser, int](db)
-	_, err := repo.FindAll(ctx, PageQuery{Page: 1, Limit: 10})
+	_, err := repo.FindAll(ctx, httpx.PageQuery{Page: 1, Limit: 10})
 	if err == nil {
 		t.Fatal("expected find error")
 	}
@@ -171,4 +172,3 @@ func TestGormRepository_FindAllQueryError(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 }
-

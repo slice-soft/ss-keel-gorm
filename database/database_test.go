@@ -12,6 +12,7 @@ import (
 	"sync"
 	"testing"
 
+	"github.com/slice-soft/ss-keel-core/contracts"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -197,7 +198,7 @@ func registerDialectorForTest(t *testing.T, engine Engine, factory DialectorFact
 	})
 }
 
-func newSQLiteInstance(t *testing.T, production bool, logger Logger) *DBinstance {
+func newSQLiteInstance(t *testing.T, production bool, logger contracts.Logger) *DBinstance {
 	t.Helper()
 
 	path := filepath.Join(t.TempDir(), "test.db")
