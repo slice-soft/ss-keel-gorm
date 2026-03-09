@@ -1,6 +1,10 @@
 package database
 
-import "context"
+import (
+	"context"
+
+	"github.com/slice-soft/ss-keel-core/contracts"
+)
 
 // DBHealthChecker implements core.HealthChecker for a GORM database connection.
 // Register it with app.RegisterHealthChecker(database.NewHealthChecker(db))
@@ -8,6 +12,8 @@ import "context"
 type DBHealthChecker struct {
 	instance *DBinstance
 }
+
+var _ contracts.HealthChecker = (*DBHealthChecker)(nil)
 
 // NewHealthChecker returns a HealthChecker that pings the database.
 func NewHealthChecker(instance *DBinstance) *DBHealthChecker {

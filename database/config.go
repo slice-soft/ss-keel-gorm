@@ -3,6 +3,7 @@ package database
 import (
 	"time"
 
+	"github.com/slice-soft/ss-keel-core/contracts"
 	"gorm.io/gorm"
 )
 
@@ -38,7 +39,7 @@ type Config struct {
 	Pool       PoolConfig
 	GormConfig *gorm.Config
 	SkipPing   bool
-	Logger     Logger
+	Logger     contracts.Logger
 }
 
 func (cfg *Config) withDefaults() {
@@ -51,7 +52,7 @@ func (cfg *Config) withDefaults() {
 	}
 
 	if cfg.TimeZone == "" {
-		cfg.TimeZone = "America/Bogota"
+		cfg.TimeZone = "UTC"
 	}
 
 	cfg.Pool.withDefaults()

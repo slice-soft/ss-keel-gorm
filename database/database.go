@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/slice-soft/ss-keel-core/contracts"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
@@ -12,7 +13,7 @@ type DBinstance struct {
 	production bool
 	DB         *gorm.DB
 	sqlDB      *sql.DB
-	logger     Logger
+	logger     contracts.Logger
 }
 
 func New(cfg Config) (*DBinstance, error) {
