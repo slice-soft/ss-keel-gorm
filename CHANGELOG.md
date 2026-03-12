@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/slice-soft/ss-keel-gorm/compare/v1.1.0...v1.2.0) (2026-03-12)
+
+
+### Features
+
+* add EntityBase struct for database entity management ([#7](https://github.com/slice-soft/ss-keel-gorm/issues/7)) ([be64fe5](https://github.com/slice-soft/ss-keel-gorm/commit/be64fe57c73d474f12524544916f30cb2775e340))
+
 ## [1.1.0](https://github.com/slice-soft/ss-keel-gorm/compare/v1.0.1...v1.1.0) (2026-03-09)
 
 
