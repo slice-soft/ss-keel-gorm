@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/slice-soft/ss-keel-gorm/compare/v1.2.0...v1.3.0) (2026-03-15)
+
+
+### Features
+
+* add Patch method for partial updates and enhance documentation in repository ([#9](https://github.com/slice-soft/ss-keel-gorm/issues/9)) ([c6aaa0d](https://github.com/slice-soft/ss-keel-gorm/commit/c6aaa0d3bb76107422d9952c917d03889964f198))
+
 ## [1.2.0](https://github.com/slice-soft/ss-keel-gorm/compare/v1.1.0...v1.2.0) (2026-03-12)
 
 
