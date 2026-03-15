@@ -72,10 +72,21 @@ func (r *GormRepository[T, ID]) Create(ctx context.Context, entity *T) error {
 	return r.db.WithContext(ctx).Create(entity).Error
 }
 
-// Update replaces all fields of the entity identified by id.
-// The entity must have its primary key set for GORM to resolve the record.
+// Update replaces ALL fields of the entity (equivalent to HTTP PUT).
+// The entity must have its primary key set so GORM can locate the record.
+// Use Patch for partial updates (equivalent to HTTP PATCH).
 func (r *GormRepository[T, ID]) Update(ctx context.Context, _ ID, entity *T) error {
 	return r.db.WithContext(ctx).Save(entity).Error
+}
+
+// Patch applies a partial update — only the non-zero fields in patch are written
+// to the database (equivalent to HTTP PATCH).
+// Use Update when you want to replace every field (HTTP PUT semantics).
+//
+// Caveat: GORM skips zero-value fields (0, "", false, nil). To explicitly set a
+// field to its zero value use a map[string]any and r.DB().Model(...).Updates(map).
+func (r *GormRepository[T, ID]) Patch(ctx context.Context, id ID, patch *T) error {
+	return r.db.WithContext(ctx).Model(new(T)).Where("id = ?", id).Updates(patch).Error
 }
 
 // Delete removes the entity with the given ID from the database.
