@@ -1,7 +1,7 @@
 {
   "name": "ss-keel-gorm",
   "version": "0.1.0",
-  "description": "SQL via GORM — Postgres, MySQL, SQLite, SQL Server",
+  "description": "SQL via GORM — Postgres, MySQL, SQLite (requires CGO_ENABLED=1), SQL Server",
   "repo": "github.com/slice-soft/ss-keel-gorm",
   "steps": [
     {
@@ -12,25 +12,19 @@
       "type": "env",
       "key": "DATABASE_URL",
       "example": "postgres://user:pass@localhost:5432/db?sslmode=disable",
-      "description": "Database connection string"
+      "description": "Database connection string. Engine examples: Postgres → postgres://user:pass@host:5432/db?sslmode=disable | MySQL → user:pass@tcp(host:3306)/db?parseTime=true | SQLite → ./app.db (requires CGO_ENABLED=1)"
     },
     {
-      "type": "main_import",
-      "path": "github.com/slice-soft/ss-keel-gorm/database"
-    },
-    {
-      "type": "main_import",
-      "path": "github.com/slice-soft/ss-keel-core/config"
-    },
-    {
-      "type": "main_import",
-      "path": "github.com/slice-soft/ss-keel-core/logger"
+      "type": "create_provider_file",
+      "filename": "cmd/setup_database.go",
+      "guard": "func setupDatabase(",
+      "content": "package main\n\nimport (\n\t\"github.com/slice-soft/ss-keel-core/config\"\n\t\"github.com/slice-soft/ss-keel-core/core\"\n\t\"github.com/slice-soft/ss-keel-core/logger\"\n\t\"github.com/slice-soft/ss-keel-gorm/database\"\n)\n\n// setupDatabase initialises the database connection and registers a health checker.\n// Change database.EnginePostgres to the engine that matches your DATABASE_URL.\nfunc setupDatabase(app *core.App, log *logger.Logger) *database.DBinstance {\n\tdatabaseURL := config.GetEnvOrDefault(\"DATABASE_URL\", \"postgres://user:pass@localhost:5432/db?sslmode=disable\")\n\tdb, err := database.New(database.Config{\n\t\tEngine: database.EnginePostgres,\n\t\tDSN:    databaseURL,\n\t\tLogger: log,\n\t})\n\tif err != nil {\n\t\tlog.Error(\"failed to initialize database: %v\", err)\n\t}\n\tapp.RegisterHealthChecker(database.NewHealthChecker(db))\n\treturn db\n}\n"
     },
     {
       "type": "main_code",
       "anchor": "before_listen",
-      "guard": "database.New(",
-      "code": "databaseURL := config.GetEnvOrDefault(\"DATABASE_URL\", \"postgres://user:pass@localhost:5432/db?sslmode=disable\")\n\ndb, err := database.New(database.Config{\n\tEngine: database.EnginePostgres,\n\tDSN:    databaseURL,\n\tLogger: appLogger,\n})\nif err != nil {\n\tappLogger.Error(\"failed to start app: %v\", err)\n}\ndefer db.Close()\napp.RegisterHealthChecker(database.NewHealthChecker(db))"
+      "guard": "setupDatabase(",
+      "code": "db := setupDatabase(app, appLogger)\ndefer db.Close()"
     }
   ]
 }
