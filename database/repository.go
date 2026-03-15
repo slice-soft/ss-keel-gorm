@@ -82,9 +82,6 @@ func (r *GormRepository[T, ID]) Update(ctx context.Context, _ ID, entity *T) err
 // Patch applies a partial update — only the non-zero fields in patch are written
 // to the database (equivalent to HTTP PATCH).
 // Use Update when you want to replace every field (HTTP PUT semantics).
-//
-// Caveat: GORM skips zero-value fields (0, "", false, nil). To explicitly set a
-// field to its zero value use a map[string]any and r.DB().Model(...).Updates(map).
 func (r *GormRepository[T, ID]) Patch(ctx context.Context, id ID, patch *T) error {
 	return r.db.WithContext(ctx).Model(new(T)).Where("id = ?", id).Updates(patch).Error
 }
