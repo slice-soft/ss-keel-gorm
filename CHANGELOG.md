@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/slice-soft/ss-keel-gorm/compare/v1.3.0...v1.4.0) (2026-03-16)
+
+
+### Features
+
+* implement BeforeCreate hook to generate UUID and add tests for entity creation ([#11](https://github.com/slice-soft/ss-keel-gorm/issues/11)) ([f1d0a59](https://github.com/slice-soft/ss-keel-gorm/commit/f1d0a59964f84f62bfcb8e78d98a6ddfb9751fad))
+
 ## [1.3.0](https://github.com/slice-soft/ss-keel-gorm/compare/v1.2.0...v1.3.0) (2026-03-15)
 
 
