@@ -116,8 +116,32 @@ func NewUserRepository(db *database.DBinstance) *UserRepository {
 }
 ```
 
-Available methods: `FindByID`, `FindAll` (paginated), `Create`, `Update`, `Delete`.
+Available methods: `FindByID`, `FindAll` (paginated), `Create`, `Update`, `Patch`, `Delete`.
 Use `DB()` to access the underlying `*gorm.DB` for custom queries.
+
+---
+
+## 🧱 EntityBase
+
+`ss-keel-gorm` ships a ready-made `EntityBase` struct you can embed in any GORM entity to get `ID`, `CreatedAt`, and `UpdatedAt` with the correct GORM tags pre-configured:
+
+```go
+type EntityBase struct {
+    ID        string `json:"id"         gorm:"primaryKey"`
+    CreatedAt int64  `json:"created_at" gorm:"autoCreateTime:milli"`
+    UpdatedAt int64  `json:"updated_at" gorm:"autoUpdateTime:milli"`
+}
+```
+
+`CreatedAt` and `UpdatedAt` store Unix **milliseconds**. A `BeforeCreate` hook runs automatically before each insert and sets `ID` to a new UUID v4 if the field is empty — you do not need to generate IDs manually.
+
+```go
+type ProductEntity struct {
+    database.EntityBase
+    Name  string
+    Price float64
+}
+```
 
 ---
 
