@@ -16,15 +16,15 @@
     },
     {
       "type": "create_provider_file",
-      "filename": "cmd/setup_database.go",
-      "guard": "func setupDatabase(",
-      "content": "package main\n\nimport (\n\t\"github.com/slice-soft/ss-keel-core/config\"\n\t\"github.com/slice-soft/ss-keel-core/core\"\n\t\"github.com/slice-soft/ss-keel-core/logger\"\n\t\"github.com/slice-soft/ss-keel-gorm/database\"\n)\n\n// setupDatabase initialises the database connection and registers a health checker.\n// Change database.EnginePostgres to the engine that matches your DATABASE_URL.\nfunc setupDatabase(app *core.App, log *logger.Logger) *database.DBinstance {\n\tdatabaseURL := config.GetEnvOrDefault(\"DATABASE_URL\", \"postgres://user:pass@localhost:5432/db?sslmode=disable\")\n\tdb, err := database.New(database.Config{\n\t\tEngine: database.EnginePostgres,\n\t\tDSN:    databaseURL,\n\t\tLogger: log,\n\t})\n\tif err != nil {\n\t\tlog.Error(\"failed to initialize database: %v\", err)\n\t}\n\tapp.RegisterHealthChecker(database.NewHealthChecker(db))\n\treturn db\n}\n"
+      "filename": "cmd/setup_gorm.go",
+      "guard": "func setupGorm(",
+      "content": "package main\n\nimport (\n\t\"github.com/slice-soft/ss-keel-core/config\"\n\t\"github.com/slice-soft/ss-keel-core/core\"\n\t\"github.com/slice-soft/ss-keel-core/logger\"\n\t\"github.com/slice-soft/ss-keel-gorm/database\"\n)\n\n// setupGorm initialises the database connection and registers a health checker.\n// Change database.EnginePostgres to the engine that matches your DATABASE_URL.\nfunc setupGorm(app *core.App, log *logger.Logger) *database.DBinstance {\n\tdatabaseURL := config.GetEnvOrDefault(\"DATABASE_URL\", \"postgres://user:pass@localhost:5432/db?sslmode=disable\")\n\tdb, err := database.New(database.Config{\n\t\tEngine: database.EnginePostgres,\n\t\tDSN:    databaseURL,\n\t\tLogger: log,\n\t})\n\tif err != nil {\n\t\tlog.Error(\"failed to initialize database: %v\", err)\n\t}\n\tapp.RegisterHealthChecker(database.NewHealthChecker(db))\n\treturn db\n}\n"
     },
     {
       "type": "main_code",
       "anchor": "before_modules",
-      "guard": "setupDatabase(",
-      "code": "db := setupDatabase(app, appLogger)\ndefer db.Close()"
+      "guard": "setupGorm(",
+      "code": "db := setupGorm(app, appLogger)\ndefer db.Close()"
     }
   ]
 }
