@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/slice-soft/ss-keel-gorm/compare/v1.4.0...v1.4.1) (2026-03-17)
+
+
+### Bug Fixes
+
+* update entity timestamps to use milliseconds and enhance migration deprecation warnings ([#13](https://github.com/slice-soft/ss-keel-gorm/issues/13)) ([9e73cd3](https://github.com/slice-soft/ss-keel-gorm/commit/9e73cd3a18fb7aac3141e416f80a1a46fd7e63fc))
+
 ## [1.4.0](https://github.com/slice-soft/ss-keel-gorm/compare/v1.3.0...v1.4.0) (2026-03-16)
 
 
