@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.3](https://github.com/slice-soft/ss-keel-gorm/compare/v1.4.2...v1.4.3) (2026-03-17)
+
+
+### Bug Fixes
+
+* update setup process in README and keel-addon.json for GORM integration ([#19](https://github.com/slice-soft/ss-keel-gorm/issues/19)) ([0c2536e](https://github.com/slice-soft/ss-keel-gorm/commit/0c2536e736b8e3a18380445801f937a6cac9ce75))
+
 ## [1.4.2](https://github.com/slice-soft/ss-keel-gorm/compare/v1.4.1...v1.4.2) (2026-03-17)
 
 
