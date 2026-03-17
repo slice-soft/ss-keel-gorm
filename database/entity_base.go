@@ -11,8 +11,8 @@ import (
 // The generated repository does this automatically when using the official CLI templates.
 type EntityBase struct {
 	ID        string `json:"id" gorm:"primaryKey"`
-	CreatedAt int64  `json:"created_at" gorm:"autoCreateTime"`
-	UpdatedAt int64  `json:"updated_at" gorm:"autoUpdateTime"`
+	CreatedAt int64  `json:"created_at" gorm:"autoCreateTime:milli"`
+	UpdatedAt int64  `json:"updated_at" gorm:"autoUpdateTime:milli"`
 }
 
 // BeforeCreate is a GORM hook that runs before a new record is inserted into the database.

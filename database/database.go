@@ -93,10 +93,19 @@ func (db *DBinstance) GetDbInstance() *gorm.DB {
 	return db.DB
 }
 
+// Deprecated: Migration calls GORM AutoMigrate, which is not recommended in production.
+// Keel does not run automatic migrations. Manage schema changes manually.
+//
+// Options:
+//   - Option 1 (recommended): raw SQL files — up.sql / down.sql
+//   - Option 2: external tools — goose, atlas, dbmate
+//   - Option 3: CI-driven — apply SQL scripts in your pipeline
 func (db *DBinstance) Migration(models ...interface{}) {
 	_ = db.DB.AutoMigrate(models...)
 }
 
+// Deprecated: MigrationWithError calls GORM AutoMigrate, which is not recommended in production.
+// Keel does not run automatic migrations. Manage schema changes manually.
 func (db *DBinstance) MigrationWithError(models ...interface{}) error {
 	return db.DB.AutoMigrate(models...)
 }
