@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.2](https://github.com/slice-soft/ss-keel-gorm/compare/v1.4.1...v1.4.2) (2026-03-17)
+
+
+### Bug Fixes
+
+* update anchor in keel-addon.json for setupDatabase code block ([#17](https://github.com/slice-soft/ss-keel-gorm/issues/17)) ([15410c6](https://github.com/slice-soft/ss-keel-gorm/commit/15410c69b133786db6bceea639aa52d1145bac19))
+
 ## [1.4.1](https://github.com/slice-soft/ss-keel-gorm/compare/v1.4.0...v1.4.1) (2026-03-17)
 
 
