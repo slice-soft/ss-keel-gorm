@@ -27,8 +27,8 @@ keel add gorm
 
 The Keel CLI will:
 1. Add `github.com/slice-soft/ss-keel-gorm` as a dependency.
-2. Import the `database` package in `cmd/main.go` and inject initialization code.
-3. Add a `DATABASE_URL` environment variable example to your `.env`.
+2. Create `cmd/setup_gorm.go` and inject initialization code into `cmd/main.go`.
+3. Add a `DATABASE_URL` environment variable example to both `.env` and `.env.example`.
 
 ---
 
