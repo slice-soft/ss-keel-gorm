@@ -1,10 +1,10 @@
 <img src="https://cdn.slicesoft.dev/boat.svg" width="400" />
 
 # ss-keel-gorm
-Keel is a Go framework for building REST APIs with modular
-architecture, automatic OpenAPI, and built-in validation.
+Official GORM addon for Keel — SQL persistence with PostgreSQL, MySQL, MariaDB, SQLite, and SQL Server.
 
 [![CI](https://github.com/slice-soft/ss-keel-gorm/actions/workflows/ci.yml/badge.svg)](https://github.com/slice-soft/ss-keel-gorm/actions)
+[![Release](https://img.shields.io/github/v/release/slice-soft/ss-keel-gorm)](https://github.com/slice-soft/ss-keel-gorm/releases)
 ![Go](https://img.shields.io/badge/Go-1.25+-00ADD8?logo=go&logoColor=white)
 [![Go Report Card](https://goreportcard.com/badge/github.com/slice-soft/ss-keel-gorm)](https://goreportcard.com/report/github.com/slice-soft/ss-keel-gorm)
 [![Go Reference](https://pkg.go.dev/badge/github.com/slice-soft/ss-keel-gorm.svg)](https://pkg.go.dev/github.com/slice-soft/ss-keel-gorm)
@@ -212,7 +212,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 ## Links
 
 - Website: [keel-go.dev](https://keel-go.dev)
-- GitHub: [github.com/slice-soft/ss-keel-cli](https://github.com/slice-soft/ss-keel-cli)
+- GitHub: [github.com/slice-soft/ss-keel-gorm](https://github.com/slice-soft/ss-keel-gorm)
 - Documentation: [docs.keel-go.dev](https://docs.keel-go.dev)
 
 ---
