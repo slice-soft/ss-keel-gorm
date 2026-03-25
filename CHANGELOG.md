@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/slice-soft/ss-keel-gorm/compare/v1.5.1...v1.6.0) (2026-03-25)
+
+
+### Features
+
+* enhance GORM addon with new environment variables and default configurations ([#26](https://github.com/slice-soft/ss-keel-gorm/issues/26)) ([35c84d3](https://github.com/slice-soft/ss-keel-gorm/commit/35c84d3cc3e8d537c45720ba215025ed09a8f32e))
+
 ## [1.5.1](https://github.com/slice-soft/ss-keel-gorm/compare/v1.5.0...v1.5.1) (2026-03-25)
 
 
