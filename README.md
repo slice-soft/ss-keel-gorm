@@ -63,6 +63,15 @@ db, err := database.New(database.Config{
 
 ---
 
+## 🔑 Environment variables
+
+| Variable | Example | Description |
+|---|---|---|
+| `DATABASE_ENGINE` | `sqlite` | Database engine. Options: `postgres`, `mysql`, `mariadb`, `sqlite`, `sqlserver`. Defaults to `sqlite` for local development. |
+| `DATABASE_URL` | `./app.db` | Connection string or SQLite file path. Examples: `postgres://user:pass@host:5432/db?sslmode=disable`, `user:pass@tcp(host:3306)/db?parseTime=true` |
+
+---
+
 ## 🗄️ Supported engines
 
 | Engine | Constant |
