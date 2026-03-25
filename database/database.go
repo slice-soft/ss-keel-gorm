@@ -3,6 +3,7 @@ package database
 import (
 	"database/sql"
 	"fmt"
+	"time"
 
 	"github.com/slice-soft/ss-keel-core/contracts"
 	"gorm.io/gorm"
@@ -14,6 +15,7 @@ type DBinstance struct {
 	DB         *gorm.DB
 	sqlDB      *sql.DB
 	logger     contracts.Logger
+	events     chan contracts.PanelEvent
 }
 
 func New(cfg Config) (*DBinstance, error) {
@@ -64,12 +66,17 @@ func New(cfg Config) (*DBinstance, error) {
 		cfg.Logger.Info("database connected [engine=%s]", cfg.Engine)
 	}
 
-	return &DBinstance{
+	instance := &DBinstance{
 		production: cfg.Production,
 		DB:         db,
 		sqlDB:      sqlDB,
 		logger:     cfg.Logger,
-	}, nil
+		events:     make(chan contracts.PanelEvent, 256),
+	}
+
+	instance.registerCallbacks()
+
+	return instance, nil
 }
 
 func NewDBinstance(host, user, password, database string, port int, production bool) *DBinstance {
@@ -120,4 +127,76 @@ func (db *DBinstance) Close() error {
 	}
 
 	return db.sqlDB.Close()
+}
+
+func (d *DBinstance) tryEmit(e contracts.PanelEvent) {
+	select {
+	case d.events <- e:
+	default:
+	}
+}
+
+func (d *DBinstance) emitGORMEvent(tx *gorm.DB, op string) {
+	var elapsed time.Duration
+	if v, ok := tx.InstanceGet("keel:start"); ok {
+		if start, ok2 := v.(time.Time); ok2 {
+			elapsed = time.Since(start)
+		}
+	}
+
+	level := "info"
+	detail := map[string]any{
+		"operation":   op,
+		"table":       tx.Statement.Table,
+		"rows":        tx.Statement.RowsAffected,
+		"duration_ms": elapsed.Milliseconds(),
+		"slow":        elapsed > 200*time.Millisecond,
+	}
+	if sql := tx.Statement.SQL.String(); sql != "" {
+		detail["sql"] = sql
+	}
+	if tx.Error != nil {
+		detail["error"] = tx.Error.Error()
+		level = "error"
+	} else if elapsed > 200*time.Millisecond {
+		level = "warn"
+	}
+
+	d.tryEmit(contracts.PanelEvent{
+		Timestamp: time.Now(),
+		AddonID:   "gorm",
+		Label:     op,
+		Detail:    detail,
+		Level:     level,
+	})
+}
+
+func (d *DBinstance) registerCallbacks() {
+	d.DB.Callback().Query().Before("gorm:query").Register("keel:before_query", func(tx *gorm.DB) {
+		tx.InstanceSet("keel:start", time.Now())
+	})
+	d.DB.Callback().Query().After("gorm:query").Register("keel:after_query", func(tx *gorm.DB) {
+		d.emitGORMEvent(tx, "query")
+	})
+
+	d.DB.Callback().Create().Before("gorm:create").Register("keel:before_create", func(tx *gorm.DB) {
+		tx.InstanceSet("keel:start", time.Now())
+	})
+	d.DB.Callback().Create().After("gorm:create").Register("keel:after_create", func(tx *gorm.DB) {
+		d.emitGORMEvent(tx, "create")
+	})
+
+	d.DB.Callback().Update().Before("gorm:update").Register("keel:before_update", func(tx *gorm.DB) {
+		tx.InstanceSet("keel:start", time.Now())
+	})
+	d.DB.Callback().Update().After("gorm:update").Register("keel:after_update", func(tx *gorm.DB) {
+		d.emitGORMEvent(tx, "update")
+	})
+
+	d.DB.Callback().Delete().Before("gorm:delete").Register("keel:before_delete", func(tx *gorm.DB) {
+		tx.InstanceSet("keel:start", time.Now())
+	})
+	d.DB.Callback().Delete().After("gorm:delete").Register("keel:after_delete", func(tx *gorm.DB) {
+		d.emitGORMEvent(tx, "delete")
+	})
 }
