@@ -26,13 +26,13 @@ type PoolConfig struct {
 }
 
 type Config struct {
-	Engine     Engine
+	Engine     Engine `keel:"database.engine,required"`
 	Host       string
 	Port       int
 	User       string
 	Password   string
 	Database   string
-	DSN        string
+	DSN        string `keel:"database.url,required"`
 	SSLMode    string
 	TimeZone   string
 	Production bool
@@ -44,7 +44,7 @@ type Config struct {
 
 func (cfg *Config) withDefaults() {
 	if cfg.Engine == "" {
-		cfg.Engine = EnginePostgres
+		cfg.Engine = EngineSQLite
 	}
 
 	if cfg.SSLMode == "" {
