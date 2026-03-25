@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.1](https://github.com/slice-soft/ss-keel-gorm/compare/v1.5.0...v1.5.1) (2026-03-25)
+
+
+### Bug Fixes
+
+* Update ss-keel-core dependency to v0.10.0 in go.mod and go.sum ([#24](https://github.com/slice-soft/ss-keel-gorm/issues/24)) ([3089ee4](https://github.com/slice-soft/ss-keel-gorm/commit/3089ee46a92f425882fefd330ad902ff239041e3))
+
 ## [1.5.0](https://github.com/slice-soft/ss-keel-gorm/compare/v1.4.3...v1.5.0) (2026-03-25)
 
 
