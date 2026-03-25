@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/slice-soft/ss-keel-gorm/compare/v1.4.3...v1.5.0) (2026-03-25)
+
+
+### Features
+
+* implement GORM addon with event handling and devpanel integration ([#22](https://github.com/slice-soft/ss-keel-gorm/issues/22)) ([cd63a12](https://github.com/slice-soft/ss-keel-gorm/commit/cd63a1297a40a6858e685b606afcad27f5ed3ca3))
+
 ## [1.4.3](https://github.com/slice-soft/ss-keel-gorm/compare/v1.4.2...v1.4.3) (2026-03-17)
 
 
