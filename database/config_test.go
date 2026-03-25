@@ -10,8 +10,8 @@ func TestConfigWithDefaults_AppliesExpectedDefaults(t *testing.T) {
 
 	cfg.withDefaults()
 
-	if cfg.Engine != EnginePostgres {
-		t.Fatalf("expected default engine %q, got %q", EnginePostgres, cfg.Engine)
+	if cfg.Engine != EngineSQLite {
+		t.Fatalf("expected default engine %q, got %q", EngineSQLite, cfg.Engine)
 	}
 	if cfg.SSLMode != "disable" {
 		t.Fatalf("expected default ssl mode disable, got %q", cfg.SSLMode)

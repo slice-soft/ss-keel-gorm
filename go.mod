@@ -4,7 +4,7 @@ go 1.25.7
 
 require (
 	github.com/google/uuid v1.6.0
-	github.com/slice-soft/ss-keel-core v0.10.0
+	github.com/slice-soft/ss-keel-core v0.11.0
 	gorm.io/driver/mysql v1.6.0
 	gorm.io/driver/postgres v1.6.0
 	gorm.io/driver/sqlite v1.6.0

@@ -53,7 +53,7 @@ func TestAddon_Manifest(t *testing.T) {
 		t.Errorf("Manifest().Capabilities = %v, want [database]", m.Capabilities)
 	}
 
-	wantResources := []string{"postgres", "mysql", "sqlite", "sqlserver"}
+	wantResources := []string{"sqlite", "postgres", "mysql", "sqlserver"}
 	if len(m.Resources) != len(wantResources) {
 		t.Fatalf("Manifest().Resources len = %d, want %d", len(m.Resources), len(wantResources))
 	}
@@ -63,21 +63,44 @@ func TestAddon_Manifest(t *testing.T) {
 		}
 	}
 
-	if len(m.EnvVars) != 1 {
-		t.Fatalf("Manifest().EnvVars len = %d, want 1", len(m.EnvVars))
+	if len(m.EnvVars) != 2 {
+		t.Fatalf("Manifest().EnvVars len = %d, want 2", len(m.EnvVars))
 	}
-	ev := m.EnvVars[0]
+	engine := m.EnvVars[0]
+	if engine.Key != "DATABASE_ENGINE" {
+		t.Errorf("EnvVars[0].Key = %q, want %q", engine.Key, "DATABASE_ENGINE")
+	}
+	if engine.ConfigKey != "database.engine" {
+		t.Errorf("EnvVars[0].ConfigKey = %q, want %q", engine.ConfigKey, "database.engine")
+	}
+	if engine.Required {
+		t.Error("EnvVars[0].Required should be false")
+	}
+	if engine.Secret {
+		t.Error("EnvVars[0].Secret should be false")
+	}
+	if engine.Default != "sqlite" {
+		t.Errorf("EnvVars[0].Default = %q, want %q", engine.Default, "sqlite")
+	}
+
+	ev := m.EnvVars[1]
 	if ev.Key != "DATABASE_URL" {
-		t.Errorf("EnvVars[0].Key = %q, want %q", ev.Key, "DATABASE_URL")
+		t.Errorf("EnvVars[1].Key = %q, want %q", ev.Key, "DATABASE_URL")
 	}
-	if !ev.Required {
-		t.Error("EnvVars[0].Required should be true")
+	if ev.ConfigKey != "database.url" {
+		t.Errorf("EnvVars[1].ConfigKey = %q, want %q", ev.ConfigKey, "database.url")
+	}
+	if ev.Required {
+		t.Error("EnvVars[1].Required should be false")
 	}
 	if !ev.Secret {
-		t.Error("EnvVars[0].Secret should be true")
+		t.Error("EnvVars[1].Secret should be true")
+	}
+	if ev.Default != "./app.db" {
+		t.Errorf("EnvVars[1].Default = %q, want %q", ev.Default, "./app.db")
 	}
 	if ev.Source != "gorm" {
-		t.Errorf("EnvVars[0].Source = %q, want %q", ev.Source, "gorm")
+		t.Errorf("EnvVars[1].Source = %q, want %q", ev.Source, "gorm")
 	}
 }
 
