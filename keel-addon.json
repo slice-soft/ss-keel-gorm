@@ -1,48 +1,57 @@
 {
-  "name": "ss-keel-gorm",
-  "version": "0.1.0",
-  "description": "SQL via GORM — SQLite by default for local DX, plus Postgres, MySQL, MariaDB and SQL Server",
-  "repo": "github.com/slice-soft/ss-keel-gorm",
-  "steps": [
-    {
-      "type": "go_get",
-      "package": "github.com/slice-soft/ss-keel-gorm"
-    },
-    {
-      "type": "property",
-      "key": "database.engine",
-      "example": "${DATABASE_ENGINE:sqlite}",
-      "description": "Database engine used by the generated GORM bootstrap. Defaults to sqlite for local development."
-    },
-    {
-      "type": "property",
-      "key": "database.url",
-      "example": "${DATABASE_URL:./app.db}",
-      "description": "Database connection string or local sqlite file path."
-    },
-    {
-      "type": "env",
-      "key": "DATABASE_ENGINE",
-      "example": "sqlite",
-      "description": "Optional engine override for the generated GORM bootstrap."
-    },
-    {
-      "type": "env",
-      "key": "DATABASE_URL",
-      "example": "./app.db",
-      "description": "Optional database connection string. Examples: Postgres → postgres://user:pass@host:5432/db?sslmode=disable | MySQL → user:pass@tcp(host:3306)/db?parseTime=true | SQLite → ./app.db"
-    },
-    {
-      "type": "create_provider_file",
-      "filename": "cmd/setup_gorm.go",
-      "guard": "func setupGorm(",
-      "content": "package main\n\nimport (\n\t\"github.com/slice-soft/ss-keel-core/config\"\n\t\"github.com/slice-soft/ss-keel-core/core\"\n\t\"github.com/slice-soft/ss-keel-core/logger\"\n\t\"github.com/slice-soft/ss-keel-gorm/database\"\n)\n\n// setupGorm initialises the database connection and registers a health checker.\n// SQLite is used by default so a fresh project can run locally without external infrastructure.\nfunc setupGorm(app *core.App, log *logger.Logger) *database.DBinstance {\n\tdbConfig := config.MustLoadConfig[database.Config]()\n\tdbConfig.Logger = log\n\n\tdb, err := database.New(dbConfig)\n\tif err != nil {\n\t\tlog.Error(\"failed to initialize database: %v\", err)\n\t}\n\tapp.RegisterHealthChecker(database.NewHealthChecker(db))\n\treturn db\n}\n"
-    },
-    {
-      "type": "main_code",
-      "anchor": "before_modules",
-      "guard": "setupGorm(",
-      "code": "db := setupGorm(app, appLogger)\ndefer db.Close()"
-    }
-  ]
+    "name": "ss-keel-gorm",
+    "version": "0.1.0",
+    "description": "SQL via GORM — SQLite by default for local DX, plus Postgres, MySQL, MariaDB and SQL Server",
+    "repo": "github.com/slice-soft/ss-keel-gorm",
+    "capabilities": [
+        "database"
+    ],
+    "resources": [
+        "sqlite",
+        "postgres",
+        "mysql",
+        "sqlserver"
+    ],
+    "steps": [
+        {
+            "type": "go_get",
+            "package": "github.com/slice-soft/ss-keel-gorm"
+        },
+        {
+            "type": "property",
+            "key": "database.engine",
+            "example": "${DATABASE_ENGINE:sqlite}",
+            "description": "Database engine used by the generated GORM bootstrap. Defaults to sqlite for local development."
+        },
+        {
+            "type": "property",
+            "key": "database.url",
+            "example": "${DATABASE_URL:./app.db}",
+            "description": "Database connection string or local sqlite file path."
+        },
+        {
+            "type": "env",
+            "key": "DATABASE_ENGINE",
+            "example": "sqlite",
+            "description": "Optional engine override for the generated GORM bootstrap."
+        },
+        {
+            "type": "env",
+            "key": "DATABASE_URL",
+            "example": "./app.db",
+            "description": "Optional database connection string. Examples: Postgres → postgres://user:pass@host:5432/db?sslmode=disable | MySQL → user:pass@tcp(host:3306)/db?parseTime=true | SQLite → ./app.db"
+        },
+        {
+            "type": "create_provider_file",
+            "filename": "cmd/setup_gorm.go",
+            "guard": "func setupGorm(",
+            "content": "package main\n\nimport (\n\t\"github.com/slice-soft/ss-keel-core/config\"\n\t\"github.com/slice-soft/ss-keel-core/core\"\n\t\"github.com/slice-soft/ss-keel-core/logger\"\n\t\"github.com/slice-soft/ss-keel-gorm/database\"\n)\n\n// setupGorm initialises the database connection and registers a health checker.\n// SQLite is used by default so a fresh project can run locally without external infrastructure.\nfunc setupGorm(app *core.App, log *logger.Logger) *database.DBinstance {\n\tdbConfig := config.MustLoadConfig[database.Config]()\n\tdbConfig.Logger = log\n\n\tdb, err := database.New(dbConfig)\n\tif err != nil {\n\t\tlog.Error(\"failed to initialize database: %v\", err)\n\t}\n\tapp.RegisterHealthChecker(database.NewHealthChecker(db))\n\treturn db\n}\n"
+        },
+        {
+            "type": "main_code",
+            "anchor": "before_modules",
+            "guard": "setupGorm(",
+            "code": "db := setupGorm(app, appLogger)\ndefer db.Close()"
+        }
+    ]
 }
