@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.0](https://github.com/slice-soft/ss-keel-gorm/compare/v1.6.0...v1.7.0) (2026-04-22)
+
+
+### Features
+
+* update keel-addon.json to include environment variable examples for database configuration ([#29](https://github.com/slice-soft/ss-keel-gorm/issues/29)) ([59d02d8](https://github.com/slice-soft/ss-keel-gorm/commit/59d02d872c4381b79013dd2f2682aa37cebb5dfb))
+
 ## [1.6.0](https://github.com/slice-soft/ss-keel-gorm/compare/v1.5.1...v1.6.0) (2026-03-25)
 
 
