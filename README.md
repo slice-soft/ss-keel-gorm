@@ -17,6 +17,9 @@ Official GORM addon for Keel — SQL persistence with PostgreSQL, MySQL, MariaDB
 `ss-keel-gorm` adds SQL database support to a [Keel](https://keel-go.dev) project via [GORM](https://gorm.io).
 It is the official addon for relational databases in the Keel ecosystem.
 
+Current stable release: `v1.7.0` (2026-04-22)  
+Full documentation: [docs.keel-go.dev/en/addons/ss-keel-gorm](https://docs.keel-go.dev/en/addons/ss-keel-gorm/)
+
 ---
 
 ## 🚀 Installation
@@ -222,7 +225,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 - Website: [keel-go.dev](https://keel-go.dev)
 - GitHub: [github.com/slice-soft/ss-keel-gorm](https://github.com/slice-soft/ss-keel-gorm)
-- Documentation: [docs.keel-go.dev](https://docs.keel-go.dev)
+- Documentation: [docs.keel-go.dev/en/addons/ss-keel-gorm](https://docs.keel-go.dev/en/addons/ss-keel-gorm/)
 
 ---
 
