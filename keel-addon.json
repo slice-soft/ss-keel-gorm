@@ -45,7 +45,7 @@
             "type": "create_provider_file",
             "filename": "cmd/setup_gorm.go",
             "guard": "func setupGorm(",
-            "content": "package main\n\nimport (\n\t\"github.com/slice-soft/ss-keel-core/config\"\n\t\"github.com/slice-soft/ss-keel-core/core\"\n\t\"github.com/slice-soft/ss-keel-core/logger\"\n\t\"github.com/slice-soft/ss-keel-gorm/database\"\n)\n\n// setupGorm initialises the database connection and registers a health checker.\n// SQLite is used by default so a fresh project can run locally without external infrastructure.\nfunc setupGorm(app *core.App, log *logger.Logger) *database.DBinstance {\n\tdbConfig := config.MustLoadConfig[database.Config]()\n\tdbConfig.Logger = log\n\n\tdb, err := database.New(dbConfig)\n\tif err != nil {\n\t\tlog.Error(\"failed to initialize database: %v\", err)\n\t}\n\tapp.RegisterHealthChecker(database.NewHealthChecker(db))\n\treturn db\n}\n"
+            "content": "package main\n\nimport (\n\t\"github.com/slice-soft/ss-keel-core/config\"\n\t\"github.com/slice-soft/ss-keel-core/contracts\"\n\t\"github.com/slice-soft/ss-keel-core/core\"\n\t\"github.com/slice-soft/ss-keel-gorm/database\"\n)\n\n// setupGorm initialises the database connection and registers a health checker.\n// SQLite is used by default so a fresh project can run locally without external infrastructure.\nfunc setupGorm(app *core.App, log contracts.Logger) *database.DBinstance {\n\tdbConfig := config.MustLoadConfig[database.Config]()\n\tdbConfig.Logger = log\n\n\tdb, err := database.New(dbConfig)\n\tif err != nil {\n\t\tlog.Error(\"failed to initialize database: %v\", err)\n\t}\n\tapp.RegisterHealthChecker(database.NewHealthChecker(db))\n\treturn db\n}\n"
         },
         {
             "type": "main_code",
