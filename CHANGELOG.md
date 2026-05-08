@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/slice-soft/ss-keel-gorm/compare/v1.7.0...v1.7.1) (2026-05-08)
+
+
+### Bug Fixes
+
+* update logger type in setupGorm function for compatibility ([#34](https://github.com/slice-soft/ss-keel-gorm/issues/34)) ([31eefe0](https://github.com/slice-soft/ss-keel-gorm/commit/31eefe0aa0c01075b119b7ef94f9931a04305675))
+
 ## [1.7.0](https://github.com/slice-soft/ss-keel-gorm/compare/v1.6.0...v1.7.0) (2026-04-22)
 
 
